@@ -86,7 +86,7 @@ class State:
                 elif self.data[i, j] == 0:
                     token = '0'
                 else:
-                    token = "E"  # error
+                    raise ValueError(f"self.data[{i}, {j}] is {self.data[i, j]}, expect 1 or -1 or 0")
                 out += token + ' | '
             print(out)
         print('-------------')

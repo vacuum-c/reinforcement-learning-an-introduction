@@ -13,6 +13,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
 
+
 class Bandit:
     # @kArm: # of arms
     # @epsilon: probability for exploration in epsilon-greedy algorithm
@@ -53,6 +54,8 @@ class Bandit:
             self.actionCount.append(0)
 
         self.bestAction = np.argmax(self.qTrue)
+
+        self.actionProb = None
 
     # get an action for this bandit, explore or exploit?
     def getAction(self):
@@ -97,16 +100,19 @@ class Bandit:
             self.qEst[action] += self.stepSize * (reward - self.qEst[action])
         return reward
 
+
 figureIndex = 0
+
 
 # for figure 2.1
 def figure2_1():
     global figureIndex
     plt.figure(figureIndex)
     figureIndex += 1
-    sns.violinplot(data=np.random.randn(200,10) + np.random.randn(10))
+    sns.violinplot(data=np.random.randn(200, 10) + np.random.randn(10))
     plt.xlabel("Action")
     plt.ylabel("Reward distribution")
+
 
 def banditSimulation(nBandits, time, bandits):
     bestActionCounts = [np.zeros(time, dtype='float') for _ in range(0, len(bandits))]
@@ -135,14 +141,14 @@ def epsilonGreedy(nBandits, time):
     plt.figure(figureIndex)
     figureIndex += 1
     for eps, counts in zip(epsilons, bestActionCounts):
-        plt.plot(counts, label='epsilon = '+str(eps))
+        plt.plot(counts, label='epsilon = ' + str(eps))
     plt.xlabel('Steps')
     plt.ylabel('% optimal action')
     plt.legend()
     plt.figure(figureIndex)
     figureIndex += 1
     for eps, rewards in zip(epsilons, averageRewards):
-        plt.plot(rewards, label='epsilon = '+str(eps))
+        plt.plot(rewards, label='epsilon = ' + str(eps))
     plt.xlabel('Steps')
     plt.ylabel('average reward')
     plt.legend()
@@ -182,7 +188,7 @@ def ucb(nBandits, time):
 
 # for figure 2.5
 def gradientBandit(nBandits, time):
-    bandits =[[], [], [], []]
+    bandits = [[], [], [], []]
     bandits[0] = [Bandit(gradient=True, stepSize=0.1, gradientBaseline=True, trueReward=4) for _ in range(0, nBandits)]
     bandits[1] = [Bandit(gradient=True, stepSize=0.1, gradientBaseline=False, trueReward=4) for _ in range(0, nBandits)]
     bandits[2] = [Bandit(gradient=True, stepSize=0.4, gradientBaseline=True, trueReward=4) for _ in range(0, nBandits)]
@@ -201,6 +207,7 @@ def gradientBandit(nBandits, time):
     plt.ylabel('% Optimal action')
     plt.legend()
 
+
 # Figure 2.6
 def figure2_6(nBandits, time):
     labels = ['epsilon-greedy', 'gradient bandit',
@@ -214,9 +221,10 @@ def figure2_6(nBandits, time):
                   np.arange(-4, 3, dtype=np.float),
                   np.arange(-2, 3, dtype=np.float)]
 
-    bandits = [[generator(pow(2, param)) for _ in range(0, nBandits)] for generator, parameter in zip(generators, parameters) for param in parameter]
+    bandits = [[generator(pow(2, param)) for _ in range(0, nBandits)] for generator, parameter in
+               zip(generators, parameters) for param in parameter]
     _, averageRewards = banditSimulation(nBandits, time, bandits)
-    rewards = np.sum(averageRewards, axis=1)/time
+    rewards = np.sum(averageRewards, axis=1) / time
 
     global figureIndex
     plt.figure(figureIndex)
@@ -224,7 +232,7 @@ def figure2_6(nBandits, time):
     i = 0
     for label, parameter in zip(labels, parameters):
         l = len(parameter)
-        plt.plot(parameter, rewards[i:i+l], label=label)
+        plt.plot(parameter, rewards[i:i + l], label=label)
         i += l
     plt.xlabel('Parameter(2^x)')
     plt.ylabel('Average reward')

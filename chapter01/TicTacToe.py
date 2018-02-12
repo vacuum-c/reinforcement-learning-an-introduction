@@ -48,8 +48,8 @@ def compete(turns=500):
     player1Win = 0.0
     player2Win = 0.0
     for i in range(0, turns):
-        if i > 0 and i % 100 == 0:
-            print("Epoch", i, player1Win / i, ":", player2Win / i)
+        if i % 100 == 0:
+            print("Epoch", i)
         winner = judger.play()
         if winner == 1:
             player1Win += 1
